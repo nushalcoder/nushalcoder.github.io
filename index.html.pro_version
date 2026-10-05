@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sikkim Teacher's Report Card Pro</title>
+<style>
+body { font-family: sans-serif; background-color: #f0f4f8; display: flex;
+justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding:
+20px; box-sizing: border-box; }
+.app-card { background-color: white; padding: 25px; border-radius: 20px; box-shadow:
+0 10px 25px rgba(0,0,0,0.08); width: 100%; max-width: 440px; }
+h2 { margin: 0 0 5px 0; color: #1e3a8a; text-align: center; }
+.subtitle { margin: 0 0 20px 0; color: #64748b; text-align: center; font-size:
+0.9rem; }
+.pro-meta { margin-bottom: 15px; border-bottom: 2px dashed #e2e8f0; padding-bottom:
+15px; }
+.pro-input { width: 100%; padding: 10px; margin-bottom: 10px; border: 2px solid
+#cbd5e1; border-radius: 10px; font-size: 0.95rem; box-sizing: border-box; outline:
+none; }
+.config-box { background-color: #f8fafc; padding: 12px; border-radius: 12px;
+margin-bottom: 20px; border: 1px dashed #cbd5e1; display: flex; justify-content:
+space-between; align-items: center; }
+.config-box label { font-weight: bold; color: #1e3a8a; font-size: 0.9rem; }
+.config-box select { padding: 8px 12px; border-radius: 8px; border: 2px solid
+#cbd5e1; font-weight: bold; color: #334155; }
+.input-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+margin-bottom: 15px; }
+.input-group label { display: block; margin-bottom: 5px; font-weight: 600; color:
+#334155; font-size: 0.85rem; }
+.input-group input { width: 100%; padding: 10px; border: 2px solid #cbd5e1;
+border-radius: 10px; font-size: 1rem; box-sizing: border-box; outline: none; }
+.calc-btn { width: 100%; background-color: #2563eb; color: white; border: none;
+padding: 14px; font-size: 1rem; font-weight: bold; border-radius: 10px; cursor:
+pointer; margin-top: 10px; }
+.print-btn { width: 100%; background-color: #10b981; color: white; border: none;
+padding: 12px; font-size: 0.95rem; font-weight: bold; border-radius: 10px; cursor:
+pointer; margin-top: 10px; }
+.sig-block { display: none; }
+@media print {
+body { background: white; }
+.calc-btn, .config-box, .input-grid, h2, .subtitle, .pro-meta, .print-btn { display:
+none !important; }
+#result-box { display: block !important; border: none !important; background: white !
+important; padding: 0 !important; width: 100%; }
+.sig-block { display: flex !important; justify-content: space-between; margin-top:
+50px; padding-top: 20px; border-top: 1px dashed #000; }
+}
+</style>
+</head>
+<body>
+<div class="app-card">
+<h2>Report Card Pro</h2>
+<p class="subtitle">Sikkim School Edition</p>
+<div class="pro-meta"><input type="text" id="academicYear" class="pro-input" value="2026-27">
+<input type="text" id="studentName" class="pro-input" placeholder="Student Full Name">
+<input type="text" id="rollNumber" class="pro-input" placeholder="Roll Number / UID">
+</div>
+<div class="config-box">
+<label>Exam Out Of:</label>
+<select id="max-marks-select">
+<option value="100">100 Marks Each</option>
+<option value="90">90 Marks Each</option>
+<option value="80">80 Marks Each</option>
+<option value="60">60 Marks Each</option>
+<option value="50">50 Marks Each</option>
+<option value="30">30 Marks Each</option>
+</select>
+</div>
+<div class="input-grid">
+<div class="input-group"><label>Mathematics</label><input type="number" id="math"
+value="0"></div>
+<div class="input-group"><label>Science</label><input type="number" id="science"
+value="0"></div>
+<div class="input-group"><label>English</label><input type="number" id="english"
+value="0"></div>
+<div class="input-group"><label>Hindi</label><input type="number" id="hindi"
+value="0"></div>
+<div class="input-group"><label>Nepali</label><input type="number" id="nepali"
+value="0"></div>
+<div class="input-group"><label>SST - History</label><input type="number"
+id="history" value="0"></div>
+<div class="input-group"><label>SST - Civics</label><input type="number" id="civics"
+value="0"></div>
+<div class="input-group"><label>SST - Geography</label><input type="number"
+id="geography" value="0"></div>
+</div>
+<button class="calc-btn" onclick="startCalculation()">Calculate Student
+Result</button>
+<div id="result-box" style="margin-top: 20px; display: none; padding: 15px;
+background-color: #eff6ff; border-radius: 12px; border-left: 5px solid #2563eb;">
+<h3 style="margin:0 0 10px 0; color:#1e3a8a;">Official Performance Sheet</h3>
+<p>Academic Year: <span id="res-year">-</span></p>
+<p>Student Name: <span id="res-name">-</span></p>
+<p>Roll Number: <span id="res-roll">-</span></p>
+<p>Total Secured: <span id="total-score">0</span> / <span
+id="max-possible-score">800</span></p>
+<p>Percentage: <span id="percentage">0%</span></p>
+<p>Assigned Grade: <span id="grade">-</span></p>
+<div class="sig-block">
+<div>Class Teacher Signature</div>
+<div>Principal Signature</div>
+</div>
+<button class="print-btn" onclick="window.print()">Print / Save Marksheet PDF</button>
+</div>
+</div>
+<script>
+function startCalculation() {
+var maxPerSubject = parseFloat(document.getElementById('max-marks-select').value);
+var totalMaxPossible = maxPerSubject * 8;
+var yearInput = document.getElementById('academicYear').value || "2026-27";
+var nameInput = document.getElementById('studentName').value || "N/A";
+var rollInput = document.getElementById('rollNumber').value || "N/A";
+var math = parseFloat(document.getElementById('math').value) || 0;
+var science = parseFloat(document.getElementById('science').value) || 0;
+var english = parseFloat(document.getElementById('english').value) || 0;
+var hindi = parseFloat(document.getElementById('hindi').value) || 0;
