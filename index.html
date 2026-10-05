@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Report Card Calculator</title>
+<style>
+body { font-family: sans-serif; background: #f0f4f8; display: flex; justify-content:
+center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; box-sizing:
+border-box; }
+.app-card { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px
+25px rgba(0,0,0,0.08); width: 100%; max-width: 360px; }
+h2 { margin: 0 0 5px 0; color: #1e3a8a; text-align: center; }
+.subtitle { margin: 0 0 20px 0; color: #64748b; text-align: center; font-size: 0.9rem; }
+.input-group { margin-bottom: 15px; }
+.input-group label { display: block; margin-bottom: 5px; font-weight: 600; color:
+#334155; font-size: 0.9rem; }
+.input-group input { width: 100%; padding: 10px; border: 2px solid #cbd5e1;
+border-radius: 10px; font-size: 1rem; box-sizing: border-box; outline: none; }
+.input-group input:focus { border-color: #3b82f6; }
+.calc-btn { width: 100%; background: #2563eb; color: white; border: none; padding: 12px;
+font-size: 1rem; font-weight: bold; border-radius: 10px; cursor: pointer; margin-top:
+10px; }
+.result-hidden { display: none; }
+.result-show { display: block; margin-top: 20px; padding: 15px; background: #eff6ff;
+border-radius: 12px; border-left: 5px solid #2563eb; }
+</style>
+</head>
+<body>
+<div class="app-card">
+<h2>■ Marks Calculator</h2>
+<p class="subtitle">Enter marks out of 100</p>
+<div class="input-group"><label>Math</label><input type="number" id="math"
+placeholder="0"></div>
+<div class="input-group"><label>Science</label><input type="number" id="science"
+placeholder="0"></div>
+<div class="input-group"><label>English</label><input type="number" id="english"placeholder="0"></div>
+<div class="input-group"><label>SST</label><input type="number" id="sst"
+placeholder="0"></div>
+<button class="calc-btn" onclick="calculateMarks()">Calculate Result</button>
+<div id="result-box" class="result-hidden">
+<p>Total Marks: <span id="total-score">0</span> / 400</p>
+<p>Percentage: <span id="percentage">0%</span></p>
+<p>Grade: <span id="grade">-</span></p>
+</div>
+</div>
+<script>
+function calculateMarks() {
+const m = parseFloat(document.getElementById('math').value) || 0;
+const s = parseFloat(document.getElementById('science').value) || 0;
+const e = parseFloat(document.getElementById('english').value) || 0;
+const ss = parseFloat(document.getElementById('sst').value) || 0;
+const total = m + s + e + ss;
+const pct = (total / 400) * 100;
+let g = pct >= 90 ? "A+ ■" : pct >= 80 ? "A ■" : pct >= 70 ? "B ■" : pct >= 33 ? "Pass"
+: "Fail ■";
+document.getElementById('total-score').innerText = total;
+document.getElementById('percentage').innerText = pct.toFixed(1) + "%";
+document.getElementById('grade').innerText = g;
+document.getElementById('result-box').className = "result-show";
+}
+</script>
+</body>
+</html
